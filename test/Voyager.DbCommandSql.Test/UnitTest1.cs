@@ -11,8 +11,6 @@ public class Tests
 	{
 		DefaultProvider defaultProvider = new DefaultProvider();
 		provider = defaultProvider.GetProvider();
-
-
 	}
 
 	[Test]
@@ -55,62 +53,108 @@ public class Tests
 	[Test]
 	public void SimpleSelectOutput()
 	{
-		var cmmnd = provider.CreateCommand();
-		cmmnd.CommandText = "SELECT top 1 @Pout = NazwaA FROM dbo.Akwizytor WHERE IdAkwizytor=@IdAkwizytor";
+		var cmd = provider.CreateCommand();
+		cmd.CommandText = "SELECT top 1 @Pout = NazwaA FROM dbo.Akwizytor WHERE IdAkwizytor=@IdAkwizytor";
 
-		var parametr = provider.CreateParameter();
-		parametr.ParameterName = "@IdAkwizytor";
-		parametr.DbType = System.Data.DbType.AnsiString;
-		parametr.Value = "TESTAKWIZYTOR1";
+		{
+			var parametr = provider.CreateParameter();
+			parametr.ParameterName = "@IdAkwizytor";
+			parametr.DbType = System.Data.DbType.AnsiString;
+			parametr.Value = "TESTAKWIZYTOR1";
+			cmd.Parameters.Add(parametr);
+		}
 
-		var parametrout = provider.CreateParameter();
-		parametrout.ParameterName = "@Pout";
-		parametrout.DbType = System.Data.DbType.String;
-		parametrout.Direction = System.Data.ParameterDirection.Output;
-		parametrout.Size = 100;
+		{
+			var parametrout = provider.CreateParameter();
+			parametrout.ParameterName = "@Pout";
+			parametrout.DbType = System.Data.DbType.String;
+			parametrout.Direction = System.Data.ParameterDirection.Output;
+			parametrout.Size = 100;
+			cmd.Parameters.Add(parametrout);
+		}
 
-
-		cmmnd.Parameters.Add(parametr);
-		cmmnd.Parameters.Add(parametrout);
-
-		string test = cmmnd.GetGeneratedQuery();
+		string test = cmd.GetGeneratedQuery();
 		Assert.That(test, Is.EqualTo("DECLARE @Pout nvarchar(100)" + Environment.NewLine + "SELECT top 1 @Pout = NazwaA FROM dbo.Akwizytor WHERE IdAkwizytor='TESTAKWIZYTOR1'" + Environment.NewLine + "SELECT @Pout"));
 	}
 
 
 	[Test]
-	public void CimpleCall()
+	public void SimpleCall()
 	{
 		var cmd = provider.CreateCommand();
 		cmd.CommandText = "dbo.sp_Call1";
 		cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-		var parametr = provider.CreateParameter();
-		parametr.ParameterName = "@IdAkwizytor";
-		parametr.DbType = System.Data.DbType.AnsiString;
-		parametr.Value = "TESTAKWIZYTOR1";
+		{
+			var parametr = provider.CreateParameter();
+			parametr.ParameterName = "@IdAkwizytor";
+			parametr.DbType = System.Data.DbType.AnsiString;
+			parametr.Value = "TESTAKWIZYTOR1";
+			cmd.Parameters.Add(parametr);
+
+		}
+
+		{
+			var parametrint = provider.CreateParameter();
+			parametrint.ParameterName = "@NrZlec";
+			parametrint.DbType = System.Data.DbType.Int32;
+			parametrint.Value = 22;
+			cmd.Parameters.Add(parametrint);
+
+		}
+		{
+			var parametrout = provider.CreateParameter();
+			parametrout.ParameterName = "@Pout";
+			parametrout.DbType = System.Data.DbType.String;
+			parametrout.Direction = System.Data.ParameterDirection.Output;
+			parametrout.Size = 100;
+			cmd.Parameters.Add(parametrout);
+		}
+
+		{
+			var paramDecim = provider.CreateParameter();
+			paramDecim.ParameterName = "@Dec1";
+			paramDecim.DbType = System.Data.DbType.Decimal;
+			paramDecim.Direction = System.Data.ParameterDirection.Output;
+			paramDecim.Precision = 8;
+			paramDecim.Scale = 4;
+
+			cmd.Parameters.Add(paramDecim);
+		}
 
 
-		var parametrint = provider.CreateParameter();
-		parametrint.ParameterName = "@NrZlec";
-		parametrint.DbType = System.Data.DbType.Int32;
-		parametrint.Value = 22;
+		{
+			var paramDecim = provider.CreateParameter();
+			paramDecim.ParameterName = "@Dec2";
+			paramDecim.DbType = System.Data.DbType.Decimal;
+			paramDecim.Direction = System.Data.ParameterDirection.Input;
+			paramDecim.Precision = 8;
+			paramDecim.Scale = 4;
+			paramDecim.Value = (decimal)433.2321;
+			cmd.Parameters.Add(paramDecim);
+		}
 
+		{
+			var paramdate = provider.CreateParameter();
+			paramdate.ParameterName = "@DataOut";
+			paramdate.DbType = System.Data.DbType.DateTime;
+			paramdate.Direction = System.Data.ParameterDirection.Output;
 
-		var parametrout = provider.CreateParameter();
-		parametrout.ParameterName = "@Pout";
-		parametrout.DbType = System.Data.DbType.String;
-		parametrout.Direction = System.Data.ParameterDirection.Output;
-		parametrout.Size = 100;
+			cmd.Parameters.Add(paramdate);
+		}
 
-
-
-		cmd.Parameters.Add(parametr);
-		cmd.Parameters.Add(parametrint);
-		cmd.Parameters.Add(parametrout);
+		{
+			var paramdate = provider.CreateParameter();
+			paramdate.ParameterName = "@DataInt";
+			paramdate.DbType = System.Data.DbType.DateTime;
+			paramdate.Direction = System.Data.ParameterDirection.Input;
+			paramdate.Value = new DateTime(2023, 03, 21, 12, 13, 45);
+			cmd.Parameters.Add(paramdate);
+		}
 
 		string test = cmd.GetGeneratedQuery();
-		Assert.That(test, Is.EqualTo("DECLARE @Pout nvarchar(100)\r\nEXEC dbo.sp_Call1 @IdAkwizytor='TESTAKWIZYTOR1', @NrZlec=22, @Pout=@Pout OUTPUT\r\nSELECT @Pout"));
+		Console.WriteLine(test);
+		Assert.That(test, Is.EqualTo("DECLARE @Pout nvarchar(100), @Dec1 decimal(8,4), @DataOut datetime\r\nEXEC dbo.sp_Call1 @IdAkwizytor='TESTAKWIZYTOR1', @NrZlec=22, @Pout=@Pout OUTPUT, @Dec1=@Dec1 OUTPUT, @Dec2=433.2321, @DataOut=@DataOut OUTPUT, @DataInt='2023-03-21 12:13:45.000'\r\nSELECT @Pout,@Dec1,@DataOut"));
 	}
 
 }

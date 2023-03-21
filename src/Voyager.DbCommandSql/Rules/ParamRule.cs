@@ -7,7 +7,7 @@ namespace Voyager.DbCommandSql.Rules
 	{
 		public virtual String GetType(DbType dbType)
 		{
-			return dbType.ToString();
+			return dbType.ToString().ToLower();
 		}
 
 		public virtual string GetValue(object dbValue)

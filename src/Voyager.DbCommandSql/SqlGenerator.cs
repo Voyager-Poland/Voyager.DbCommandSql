@@ -87,9 +87,11 @@ namespace Voyager.DbCommandSql
 				if (!String.IsNullOrEmpty(paramList))
 					paramList += ",";
 				paramList += $" {dbpar.ParameterName} {TranslateType(dbpar.DbType)}";
-
-				if (dbpar.Size > 4)
+				// ? Może to przenieść do TranslateType?
+				if (dbpar.Size > 0)
 					paramList += $"({dbpar.Size})";
+				if (dbpar.Precision > 0 && dbpar.Scale > 0)
+					paramList += $"({dbpar.Precision},{dbpar.Scale})";
 			}
 
 			return paramList;
