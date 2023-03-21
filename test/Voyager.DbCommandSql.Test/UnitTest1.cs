@@ -13,12 +13,22 @@ public class Tests
 		provider = defaultProvider.GetProvider();
 	}
 
+
 	[Test]
-	public void CallEmpty()
+	public void SimpleSelectParam()
 	{
-		var cmmnd = provider.CreateCommand();
-		string test = cmmnd.GetGeneratedQuery();
-		Assert.That(test, Is.Empty);
+		var cmd = provider.CreateCommand();
+		cmd.CommandText = "SELECT * FROM dbo.Akwizytor WHERE IdAkwizytor=@IdAkwizytor";
+
+		var parametr = provider.CreateParameter();
+		parametr.ParameterName = "@IdAkwizytor";
+		parametr.DbType = System.Data.DbType.AnsiString;
+		parametr.Value = "TESTAKWIZYTOR1";
+
+		cmd.Parameters.Add(parametr);
+
+		string test = cmd.GetGeneratedQuery();
+		Assert.That(test, Is.EqualTo("SELECT * FROM dbo.Akwizytor WHERE IdAkwizytor='TESTAKWIZYTOR1'"));
 	}
 
 
@@ -31,22 +41,19 @@ public class Tests
 		Assert.That(test, Is.EqualTo("SELECT * FROM dbo.Akwizytor"));
 	}
 
+
 	[Test]
-	public void SimpleSelectParam()
+	public void CallEmpty()
 	{
 		var cmmnd = provider.CreateCommand();
-		cmmnd.CommandText = "SELECT * FROM dbo.Akwizytor WHERE IdAkwizytor=@IdAkwizytor";
-
-		var parametr = provider.CreateParameter();
-		parametr.ParameterName = "@IdAkwizytor";
-		parametr.DbType = System.Data.DbType.AnsiString;
-		parametr.Value = "TESTAKWIZYTOR1";
-
-		cmmnd.Parameters.Add(parametr);
-
 		string test = cmmnd.GetGeneratedQuery();
-		Assert.That(test, Is.EqualTo("SELECT * FROM dbo.Akwizytor WHERE IdAkwizytor='TESTAKWIZYTOR1'"));
+		Assert.That(test, Is.Empty);
 	}
+
+
+
+
+
 
 
 

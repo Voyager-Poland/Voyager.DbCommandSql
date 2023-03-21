@@ -90,7 +90,7 @@ namespace Voyager.DbCommandSql
 				// ? Może to przenieść do TranslateType?
 				if (dbpar.Size > 0)
 					paramList += $"({dbpar.Size})";
-				if (dbpar.Precision > 0 && dbpar.Scale > 0)
+				if (dbpar.Precision > 0)
 					paramList += $"({dbpar.Precision},{dbpar.Scale})";
 			}
 
