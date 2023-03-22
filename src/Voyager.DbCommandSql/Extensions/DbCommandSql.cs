@@ -4,10 +4,12 @@ namespace System.Data.Common
 {
 	public static class DbCommandSqlExt
 	{
-		public static string GetGeneratedQuery(this DbCommand dbCommand)
+		public static string GetSql(this DbCommand dbCommand)
 		{
-			SqlGenerator sqlGenerator = (dbCommand.CommandType == CommandType.StoredProcedure) ? new StoredProcedureSql(dbCommand) : new QueryCommandSql(dbCommand);
-			return sqlGenerator.Sql();
+			if (dbCommand.CommandType == CommandType.StoredProcedure)
+				return new StoredProcedureSql(dbCommand).GetSql();
+			else
+				return new QueryCommandSql(dbCommand).GetSql();
 		}
 	}
 }

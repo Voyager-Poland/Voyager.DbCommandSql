@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <TargetFrameworks>netcoreapp3.1;net472</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
 
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/Voyager-Poland/Voyager.DbCommandSql</PackageProjectUrl>
@@ -28,7 +28,7 @@
     <DelaySign>False</DelaySign>
     <AssemblyOriginatorKeyFile>sgVHealth.snk</AssemblyOriginatorKeyFile>
     <PackAsTool>False</PackAsTool>
-    <PackageTags>Test;Logging;SQL;DBCommand</PackageTags>
+    <PackageTags>Test;Logging;SQL;DbCommand;DbProvider</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

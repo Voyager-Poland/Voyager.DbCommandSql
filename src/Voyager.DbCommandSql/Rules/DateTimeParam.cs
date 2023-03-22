@@ -1,4 +1,6 @@
-﻿namespace Voyager.DbCommandSql.Rules
+﻿using System;
+
+namespace Voyager.DbCommandSql.Rules
 {
 	internal class DateTimeParam : ParamRule
 	{

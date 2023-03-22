@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Globalization;
 using Voyager.DbCommandSql.Rules;
@@ -18,7 +20,7 @@ namespace Voyager.DbCommandSql
 			dictionary = AddRules();
 		}
 
-		public string Sql()
+		public string GetSql()
 		{
 			return Declaration() + GetCallText(dbCommand) + Parameters(dbCommand) + OutputResult(dbCommand);
 		}
@@ -69,7 +71,7 @@ namespace Voyager.DbCommandSql
 
 		protected abstract string GetCallText(DbCommand dbCommand);
 
-		protected ParamRule? GetParamRule(DbType dbType)
+		protected ParamRule GetParamRule(DbType dbType)
 		{
 			if (dictionary.ContainsKey(dbType))
 				return dictionary[dbType];
@@ -84,7 +86,7 @@ namespace Voyager.DbCommandSql
 			{
 				if (!OuptPutType(dbpar.Direction))
 					continue;
-				if (!String.IsNullOrEmpty(paramList))
+				if (!string.IsNullOrEmpty(paramList))
 					paramList += ",";
 				paramList += $" {dbpar.ParameterName} {TranslateType(dbpar.DbType)}";
 				// ? Może to przenieść do TranslateType?
@@ -99,7 +101,7 @@ namespace Voyager.DbCommandSql
 
 		private string TranslateType(DbType dbType)
 		{
-			ParamRule? param = GetParamRule(dbType);
+			ParamRule param = GetParamRule(dbType);
 			if (param != null)
 				return param.GetType(dbType);
 			return dbType.ToString();
@@ -107,7 +109,7 @@ namespace Voyager.DbCommandSql
 
 		protected string GetPrepareValue(DbParameter dbPar)
 		{
-			ParamRule? param = GetParamRule(dbPar.DbType);
+			ParamRule param = GetParamRule(dbPar.DbType);
 			if (param != null)
 				return param.GetValue(dbPar.Value);
 			return string.Format(CultureInfo.InvariantCulture, "{0:N}", dbPar.Value);

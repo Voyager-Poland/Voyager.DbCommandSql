@@ -27,7 +27,7 @@ public class Tests
 
 		cmd.Parameters.Add(parametr);
 
-		string test = cmd.GetGeneratedQuery();
+		string test = cmd.GetSql();
 		Assert.That(test, Is.EqualTo("SELECT * FROM dbo.Akwizytor WHERE IdAkwizytor='TESTAKWIZYTOR1'"));
 	}
 
@@ -37,7 +37,7 @@ public class Tests
 	{
 		var cmmnd = provider.CreateCommand();
 		cmmnd.CommandText = "SELECT * FROM dbo.Akwizytor";
-		string test = cmmnd.GetGeneratedQuery();
+		string test = cmmnd.GetSql();
 		Assert.That(test, Is.EqualTo("SELECT * FROM dbo.Akwizytor"));
 	}
 
@@ -46,7 +46,7 @@ public class Tests
 	public void CallEmpty()
 	{
 		var cmmnd = provider.CreateCommand();
-		string test = cmmnd.GetGeneratedQuery();
+		string test = cmmnd.GetSql();
 		Assert.That(test, Is.Empty);
 	}
 
@@ -80,7 +80,7 @@ public class Tests
 			cmd.Parameters.Add(parametrout);
 		}
 
-		string test = cmd.GetGeneratedQuery();
+		string test = cmd.GetSql();
 		Assert.That(test, Is.EqualTo("DECLARE @Pout nvarchar(100)" + Environment.NewLine + "SELECT top 1 @Pout = NazwaA FROM dbo.Akwizytor WHERE IdAkwizytor='TESTAKWIZYTOR1'" + Environment.NewLine + "SELECT @Pout"));
 	}
 
@@ -159,7 +159,7 @@ public class Tests
 			cmd.Parameters.Add(paramdate);
 		}
 
-		string test = cmd.GetGeneratedQuery();
+		string test = cmd.GetSql();
 		Console.WriteLine(test);
 		Assert.That(test, Is.EqualTo("DECLARE @Pout nvarchar(100), @Dec1 decimal(8,4), @DataOut datetime\r\nEXEC dbo.sp_Call1 @IdAkwizytor='TESTAKWIZYTOR1', @NrZlec=22, @Pout=@Pout OUTPUT, @Dec1=@Dec1 OUTPUT, @Dec2=433.2321, @DataOut=@DataOut OUTPUT, @DataInt='2023-03-21 12:13:45.000'\r\nSELECT @Pout,@Dec1,@DataOut"));
 	}

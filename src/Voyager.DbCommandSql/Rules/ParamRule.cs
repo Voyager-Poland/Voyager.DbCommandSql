@@ -1,11 +1,12 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 
 namespace Voyager.DbCommandSql.Rules
 {
 
 	internal abstract class ParamRule
 	{
-		public virtual String GetType(DbType dbType)
+		public virtual string GetType(DbType dbType)
 		{
 			return dbType.ToString().ToLower();
 		}

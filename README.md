@@ -13,9 +13,11 @@ using System.Data.Common;
   public void SimpleSelectParam()
   {
     var cmd = provider.CreateCommand();
+ 
 ...
-    string test = cmd.GetGeneratedQuery();
-  Assert.That(test, Is.EqualTo("SELECT * FROM dbo.Akwizytor WHERE IdAkwizytor='TESTAKWIZYTOR1'"));
+
+    string test = cmd.GetSql();
+    Assert.That(test, Is.EqualTo("SELECT * FROM dbo.Akwizytor WHERE IdAkwizytor='TESTAKWIZYTOR1'"));
   }
 ```
 
