@@ -100,12 +100,21 @@ public class Tests
 			cmd.Parameters.Add(parametr);
 
 		}
+		{
+			var parametr = provider.CreateParameter();
+			parametr.ParameterName = "@Empty";
+			parametr.DbType = System.Data.DbType.AnsiString;
+			parametr.Value = DBNull.Value;
+			cmd.Parameters.Add(parametr);
+
+		}
 
 		{
 			var parametrint = provider.CreateParameter();
 			parametrint.ParameterName = "@NrZlec";
 			parametrint.DbType = System.Data.DbType.Int32;
 			parametrint.Value = 22;
+			parametrint.Size = 4;
 			cmd.Parameters.Add(parametrint);
 
 		}
@@ -151,7 +160,7 @@ public class Tests
 		}
 
 		{
-			var paramdate = provider.CreateParameter();
+			var paramdate = provider.CreateParameter()!;
 			paramdate.ParameterName = "@DataInt";
 			paramdate.DbType = System.Data.DbType.DateTime;
 			paramdate.Direction = System.Data.ParameterDirection.Input;
@@ -159,9 +168,18 @@ public class Tests
 			cmd.Parameters.Add(paramdate);
 		}
 
+		{
+			var paramdate = provider.CreateParameter()!;
+			paramdate.ParameterName = "@Int2";
+			paramdate.DbType = System.Data.DbType.Int32;
+			paramdate.Direction = System.Data.ParameterDirection.Output;
+			paramdate.Size = 4;
+			cmd.Parameters.Add(paramdate);
+		}
+
 		string test = cmd.GetSql();
 		Console.WriteLine(test);
-		Assert.That(test, Is.EqualTo("DECLARE @Pout nvarchar(100), @Dec1 decimal(8,4), @DataOut datetime\r\nEXEC dbo.sp_Call1 @IdAkwizytor='TESTAKWIZYTOR1', @NrZlec=22, @Pout=@Pout OUTPUT, @Dec1=@Dec1 OUTPUT, @Dec2=433.2321, @DataOut=@DataOut OUTPUT, @DataInt='2023-03-21 12:13:45.000'\r\nSELECT @Pout,@Dec1,@DataOut"));
+		Assert.That(test, Is.EqualTo("DECLARE @Pout nvarchar(100), @Dec1 decimal(8,4), @DataOut datetime, @Int2 int\r\nEXEC dbo.sp_Call1 @IdAkwizytor='TESTAKWIZYTOR1', @Empty=NULL, @NrZlec=22, @Pout=@Pout OUTPUT, @Dec1=@Dec1 OUTPUT, @Dec2=433.2321, @DataOut=@DataOut OUTPUT, @DataInt='2023-03-21 12:13:45.000', @Int2=@Int2 OUTPUT\r\nSELECT @Pout,@Dec1,@DataOut,@Int2"));
 	}
 
 }

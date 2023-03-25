@@ -12,7 +12,7 @@ namespace Voyager.DbCommandSql.Rules
 
 		public override string GetValue(object dbValue)
 		{
-			if (dbValue != null || dbValue != DBNull.Value)
+			if (dbValue != null && dbValue != DBNull.Value)
 				return $"N'{dbValue}'";
 			return base.GetValue(dbValue);
 		}

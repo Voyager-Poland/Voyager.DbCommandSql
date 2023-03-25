@@ -88,23 +88,21 @@ namespace Voyager.DbCommandSql
 					continue;
 				if (!string.IsNullOrEmpty(paramList))
 					paramList += ",";
-				paramList += $" {dbpar.ParameterName} {TranslateType(dbpar.DbType)}";
-				// ? Może to przenieść do TranslateType?
-				if (dbpar.Size > 0)
-					paramList += $"({dbpar.Size})";
-				if (dbpar.Precision > 0)
-					paramList += $"({dbpar.Precision},{dbpar.Scale})";
+				paramList += $" {dbpar.ParameterName} {TranslateType(dbpar)}";
+
+
 			}
 
 			return paramList;
 		}
 
-		private string TranslateType(DbType dbType)
+		private string TranslateType(DbParameter dbPar)
 		{
-			ParamRule param = GetParamRule(dbType);
+
+			ParamRule param = GetParamRule(dbPar.DbType);
 			if (param != null)
-				return param.GetType(dbType);
-			return dbType.ToString();
+				return param.GetType(dbPar.DbType) + param.GetTypeSize(dbPar);
+			return dbPar.DbType.ToString().ToLower() + dbPar.GetTypeSize();
 		}
 
 		protected string GetPrepareValue(DbParameter dbPar)
