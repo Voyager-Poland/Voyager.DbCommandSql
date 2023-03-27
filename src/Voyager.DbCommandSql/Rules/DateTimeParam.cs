@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Data.Common;
 
 namespace Voyager.DbCommandSql.Rules
 {
 	internal class DateTimeParam : ParamRule
 	{
+
+		public DateTimeParam() : base(new TypeSizeEmpty()) { }
 		public override string GetValue(object dbValue)
 		{
 			if (dbValue != null && dbValue != DBNull.Value)
@@ -12,9 +13,5 @@ namespace Voyager.DbCommandSql.Rules
 			return base.GetValue(dbValue);
 		}
 
-		public override string GetTypeSize(DbParameter dbParam)
-		{
-			return string.Empty;
-		}
 	}
 }

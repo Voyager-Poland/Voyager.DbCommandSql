@@ -6,6 +6,8 @@ namespace Voyager.DbCommandSql.Rules
 
 	internal class AnsiStringParam : StringParam
 	{
+
+
 		public override string GetType(DbType dbType)
 		{
 			return "varchar";

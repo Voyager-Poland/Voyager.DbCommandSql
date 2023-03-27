@@ -5,6 +5,8 @@ namespace Voyager.DbCommandSql.Rules
 {
 	internal class StringParam : ParamRule
 	{
+
+
 		public override string GetType(DbType dbType)
 		{
 			return "nvarchar";

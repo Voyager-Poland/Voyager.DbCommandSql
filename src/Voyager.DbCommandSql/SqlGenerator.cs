@@ -89,8 +89,6 @@ namespace Voyager.DbCommandSql
 				if (!string.IsNullOrEmpty(paramList))
 					paramList += ",";
 				paramList += $" {dbpar.ParameterName} {TranslateType(dbpar)}";
-
-
 			}
 
 			return paramList;
@@ -98,7 +96,6 @@ namespace Voyager.DbCommandSql
 
 		private string TranslateType(DbParameter dbPar)
 		{
-
 			ParamRule param = GetParamRule(dbPar.DbType);
 			if (param != null)
 				return param.GetType(dbPar.DbType) + param.GetTypeSize(dbPar);

@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Data.Common;
 
 namespace Voyager.DbCommandSql.Rules
 {
@@ -9,9 +8,6 @@ namespace Voyager.DbCommandSql.Rules
 		{
 			return "small";
 		}
-		public override string GetTypeSize(DbParameter dbParam)
-		{
-			return string.Empty;
-		}
+
 	}
 }
